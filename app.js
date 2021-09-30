@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+
 const pathGirlsFile = path.join(__dirname, 'girls');
 const pathBoysFile = path.join(__dirname, 'boys');
 
 const sorter = (directory, gender, pathGender) => {
-
     const pathName = path.join(__dirname, directory);
 
     fs.readdir(pathName, (err, data) => {
@@ -12,8 +12,8 @@ const sorter = (directory, gender, pathGender) => {
             console.log(err);
             return;
         }
+        
         data.forEach(file => {
-
             const pathFile = path.join(pathName, file);
 
             fs.readFile(pathFile, (err, data) => {
