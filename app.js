@@ -1,7 +1,8 @@
-const sorter = (directory) => {
-
     const fs = require('fs');
     const path = require('path');
+
+const sorter = (directory) => {
+
     const pathName = path.join(__dirname, directory);
 
     fs.readdir(pathName, (err, data) => {
@@ -39,3 +40,4 @@ const sorter = (directory) => {
 }
 
 sorter('boys');
+sorter('girls');
