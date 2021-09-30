@@ -71,6 +71,6 @@ const userCreator = (users) => {
     });
 };
 
-folderCreator(nameFolders)
+folderCreator(nameFolders);
 userCreator(users);
 
