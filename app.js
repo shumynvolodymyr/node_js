@@ -8,7 +8,13 @@
 
 const fs = require('fs');
 const path = require('path');
+
 const mkdirPath = path.join(__dirname, 'users');
+const pathWomanYounger20 = path.join(__dirname, 'users', 'womanYounger20');
+const pathWomanOlder20 = path.join(__dirname, 'users', 'womanOlder20');
+const pathManYounger20 = path.join(__dirname, 'users', 'manYounger20');
+const pathManOlder20 = path.join(__dirname, 'users', 'manOlder20');
+
 const nameFolders = ['manOlder20', 'manYounger20', 'womanOlder20', 'womanYounger20'];
 const users = [
     {name: 'olya', gender: 'female', age: 20},
@@ -25,44 +31,44 @@ const users = [
 
 const folderCreator = (folders) => {
     folders.forEach(folder => {
-        fs.mkdirSync(path.join(mkdirPath, folder), {recursive: true}, err => {
+        fs.mkdirSync(path.join(mkdirPath, folder), {recursive: true}, (err) => {
             console.log(err);
         });
     });
 };
 
 const userCreator = (users) => {
+
     users.forEach(user => {
-        const pathWomanYounger20 = path.join(__dirname, 'users', 'womanYounger20', `${user.name}.json`);
-        const pathWomanOlder20 = path.join(__dirname, 'users', 'womanOlder20', `${user.name}.json`);
-        const pathManYounger20 = path.join(__dirname, 'users', 'manYounger20', `${user.name}.json`);
-        const pathManOlder20 = path.join(__dirname, 'users', 'manOlder20', `${user.name}.json`);
 
         if (user.gender === 'female') {
             if (user.age <= 20) {
-                fs.writeFile(pathWomanYounger20, `${JSON.stringify(user)}`, err => {
+                fs.writeFile(path.join(pathWomanYounger20, `${user.name}.json`), `${JSON.stringify(user)}`, (err) => {
                     console.log(err);
                 });
             }
+
             if (user.age > 20) {
-                fs.writeFile(pathWomanOlder20, `${JSON.stringify(user)}`, err => {
+                fs.writeFile(path.join(pathWomanOlder20, `${user.name}.json`), `${JSON.stringify(user)}`, (err) => {
                     console.log(err);
                 });
             }
         }
+
         if (user.gender === 'male') {
             if (user.age <= 20) {
-                fs.writeFile(pathManYounger20, `${JSON.stringify(user)}`, err => {
+                fs.writeFile(path.join(pathManYounger20, `${user.name}.json`), `${JSON.stringify(user)}`, (err) => {
                     console.log(err);
                 });
             }
+
             if (user.age > 20) {
-                fs.writeFile(pathManOlder20, `${JSON.stringify(user)}`, err => {
+                fs.writeFile(path.join(pathManOlder20, `${user.name}.json`), `${JSON.stringify(user)}`, (err) => {
                     console.log(err);
                 });
             }
         }
-    })
+    });
 };
 
 folderCreator(nameFolders)
