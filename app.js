@@ -2,7 +2,7 @@ const sorter = (directory) => {
 
     const fs = require('fs');
     const path = require('path');
-    const pathName = path.join(__dirname, `${directory}`)
+    const pathName = path.join(__dirname, directory);
 
     fs.readdir(pathName, (err, data) => {
         if (err) {
@@ -18,7 +18,7 @@ const sorter = (directory) => {
             fs.readFile(pathFile, (err, data) => {
                 if (err) {
                     console.log(err);
-                    return
+                    return;
                 }
 
                 const value = JSON.parse(data);
@@ -26,7 +26,7 @@ const sorter = (directory) => {
                 if (value.gender === "female") {
                     fs.rename(pathFile, pathGirlsFile, err => {
                         console.log(err);
-                    })
+                    });
                 }
                 if (value.gender === "male") {
                     fs.rename(pathFile, pathBoysFile, err => {
@@ -39,3 +39,4 @@ const sorter = (directory) => {
 }
 
 sorter('boys');
+sorter('girls');
