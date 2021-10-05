@@ -1,58 +1,49 @@
-const db = require('../db/users_db.json');
 const fs = require('fs');
 const path = require("path");
+const {fileReader} = require("../helpers/users.helpers");
 
 const pathDB = path.join(__dirname, '../', 'db', 'users_db.json');
 
 module.exports = {
-    getUsers: (req, res) => {
-        fs.readFile(pathDB, (err, data) => {
-            if (err) {
-                console.log(err);
-            }
-
-            res.json(JSON.parse(data.toString()));
-        });
+    getUsers: async (req, res) => {
+        res.json(await fileReader(pathDB));
     },
 
-    getUserById: (req, res) => {
+    getUserById: async (req, res) => {
         const {user_id} = req.params;
+        const users = await fileReader(pathDB);
+        const user = users.filter(user => user.id === +user_id)
 
-        fs.readFile(pathDB, (err, data) => {
-            if (err) {
-                console.log(err);
-            }
-
-            const users = JSON.parse(data.toString());
-            const user = users.filter(user => {
-                return user_id === user.id
-            });
-            res.json(user);
-        });
+        res.json(user);
     },
 
-    createUsers: (req, res) => {
-        fs.readFile(pathDB, (err, data) => {
+    createUsers: async (req, res) => {
+        const users = await fileReader(pathDB);
+        users.push({...req.body, id: Math.floor(Math.random() * 100)});
+
+        fs.writeFile(pathDB, JSON.stringify(users), (err) => {
             if (err) {
                 console.log(err);
             }
-            const users = JSON.parse(data.toString());
-            users.push({...req.body, id: users.length + 1});
-
-            fs.writeFile(pathDB, JSON.stringify(users), (err) => {
-                if (err) {
-                    console.log(err);
-                }
-            })
-        });
-        res.json(db);
+        })
+        res.json(users);
     },
 
     updateUsers: (req, res) => {
         res.json('update user');
     },
 
-    deleteUsers: (req, res) => {
-        res.json('delete user');
+    deleteUsers: async (req, res) => {
+        const {user_id} = req.params;
+        const users = await fileReader(pathDB);
+        const user = users.filter(user => user.id !== +user_id)
+
+        fs.writeFile(pathDB, JSON.stringify(user), (err) => {
+            if (err) {
+                console.log(err);
+            }
+
+            res.json(user);
+        });
     }
 }
