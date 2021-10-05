@@ -18,9 +18,10 @@ module.exports = {
 
     createUsers: async (req, res) => {
         const users = await fileReader(pathDB);
-        users.push({...req.body, id: Math.floor(Math.random() * 100)});
+        users.push({...req.body, id: Math.floor(Math.random() * 1000)});
 
         await fileWriter(pathDB, users);
+
         res.json(users);
     },
 
@@ -34,6 +35,7 @@ module.exports = {
         const user = users.filter(user => user.id !== +user_id)
 
         await fileWriter(pathDB, user);
+
         res.json(user);
     }
-}
+};
