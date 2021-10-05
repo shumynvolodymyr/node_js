@@ -1,6 +1,5 @@
-const fs = require('fs');
 const path = require("path");
-const {fileReader} = require("../helpers/users.helpers");
+const {fileReader, fileWriter} = require("../helpers/users.helpers");
 
 const pathDB = path.join(__dirname, '../', 'db', 'users_db.json');
 
@@ -12,7 +11,7 @@ module.exports = {
     getUserById: async (req, res) => {
         const {user_id} = req.params;
         const users = await fileReader(pathDB);
-        const user = users.filter(user => user.id === +user_id)
+        const user = users.filter(user => user.id === +user_id);
 
         res.json(user);
     },
@@ -21,11 +20,7 @@ module.exports = {
         const users = await fileReader(pathDB);
         users.push({...req.body, id: Math.floor(Math.random() * 100)});
 
-        fs.writeFile(pathDB, JSON.stringify(users), (err) => {
-            if (err) {
-                console.log(err);
-            }
-        })
+        await fileWriter(pathDB, users);
         res.json(users);
     },
 
@@ -38,12 +33,7 @@ module.exports = {
         const users = await fileReader(pathDB);
         const user = users.filter(user => user.id !== +user_id)
 
-        fs.writeFile(pathDB, JSON.stringify(user), (err) => {
-            if (err) {
-                console.log(err);
-            }
-
-            res.json(user);
-        });
+        await fileWriter(pathDB, user);
+        res.json(user);
     }
 }
