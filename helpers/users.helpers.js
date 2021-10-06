@@ -5,7 +5,7 @@ const readFilePromise = util.promisify(fs.readFile);
 const writeFilePromise = util.promisify(fs.writeFile);
 
 async function fileReader(path) {
-    let data = await readFilePromise(path);
+    const data = await readFilePromise(path);
 
     return JSON.parse(data.toString());
 }

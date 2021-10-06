@@ -1,5 +1,5 @@
 const path = require("path");
-const {fileReader, fileWriter} = require("../helpers/users.helpers");
+const {fileReader, fileWriter} = require('../helpers/users.helpers');
 
 const pathDB = path.join(__dirname, '../', 'db', 'users_db.json');
 
@@ -11,7 +11,7 @@ module.exports = {
     getUserById: async (req, res) => {
         const {user_id} = req.params;
         const users = await fileReader(pathDB);
-        const user = users.filter(user => user.id === +user_id);
+        const user = users.find(user => user.id === +user_id);
 
         res.json(user);
     },
