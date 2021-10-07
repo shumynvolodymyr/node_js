@@ -40,9 +40,9 @@ module.exports = {
         }
     },
 
-    accountUser: async (req, res) => {
+    accountUser: (req, res) => {
         try {
-            const login = await req.body.login;
+            const {login} = req.body;
 
             res.json(`WELCOME ${login}`);
         } catch (e) {

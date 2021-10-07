@@ -3,10 +3,11 @@ const User = require('../db/User');
 module.exports = {
     authenticationMiddleware: async (req, res, next) => {
         try {
-            const loginData = await User.findOne({login: req.body.login, email: req.body.email});
+            const {login, email} = req.body;
+            const loginData = await User.findOne({login, email});
 
             if (!loginData) {
-                return res.json('the account does not exist or the password is incorrect');
+                throw new Error('Incorrect login or password');
             }
 
             next();
