@@ -5,7 +5,7 @@ module.exports = {
         try {
             res.json(await User.find());
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -16,7 +16,7 @@ module.exports = {
 
             res.json(user);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -26,7 +26,7 @@ module.exports = {
 
             res.json(newUser);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -37,7 +37,7 @@ module.exports = {
 
             res.json(`UserID: ${user_id} was deleted`);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     },
 
@@ -47,7 +47,7 @@ module.exports = {
 
             res.json(`WELCOME ${login}`);
         } catch (e) {
-            res.json(e);
+            res.json(e.message);
         }
     }
 };
