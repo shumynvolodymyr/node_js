@@ -15,4 +15,18 @@ module.exports = {
             res.json(e);
         }
     },
+
+    searchIdMiddleware: async (req, res, next) => {
+        try {
+            const {user_id} = req.params;
+            const user = await User.findById(user_id);
+            if (!user) {
+                throw new Error('Not found user with this ID');
+            }
+
+            next();
+        } catch (e) {
+            res.json(e);
+        }
+    }
 };
