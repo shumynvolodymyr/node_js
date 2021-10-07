@@ -34,7 +34,7 @@ module.exports = {
             const {user_id} = req.params;
             await User.deleteOne({_id: user_id});
 
-            res.json(`UserID: ${user_id} deleted`);
+            res.json(`UserID: ${user_id} was deleted`);
         } catch (e) {
             res.json(e);
         }
