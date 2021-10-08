@@ -1,7 +1,7 @@
 const RetroCars = require('../db/RetroCar');
 
 module.exports = {
-    getCars: async (req, res) => {
+    getCarsController: async (req, res) => {
         try {
             res.json(await RetroCars.find());
         } catch (e) {
@@ -9,7 +9,7 @@ module.exports = {
         }
     },
 
-    getCarsByBrand: async (req, res) => {
+    getCarsByBrandController: async (req, res) => {
         try {
             const {brand} = req.params;
             const car = await RetroCars.findOne({brand});
@@ -20,7 +20,7 @@ module.exports = {
         }
     },
 
-    createCar: async (req, res) => {
+    createCarController: async (req, res) => {
         try {
             const newCar = await RetroCars.create(req.body);
 
@@ -30,7 +30,7 @@ module.exports = {
         }
     },
 
-    updateCar: async (req, res) => {
+    updateCarController: async (req, res) => {
         try {
             const {brand} = req.params;
             await RetroCars.updateOne({brand}, {$set: req.body});
@@ -41,7 +41,7 @@ module.exports = {
         }
     },
 
-    deleteCar: async (req, res) => {
+    deleteCarController: async (req, res) => {
         try {
             const {brand} = req.params;
             await RetroCars.deleteOne({brand});
