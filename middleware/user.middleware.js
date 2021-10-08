@@ -20,12 +20,12 @@ module.exports = {
         try {
             const {user_id} = req.params;
             const user = await User.findById(user_id);
-            req.user = user;
 
             if (!user) {
                 throw new Error('Not found user with this ID');
             }
 
+            req.user = user;
             next();
         } catch (e) {
             res.json(e.message);
