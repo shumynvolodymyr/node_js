@@ -1,4 +1,4 @@
 module.exports = {
-    MONGO_URL: 'mongodb://localhost:27017/june-2021',
+    MONGO_URL: 'mongodb://localhost:27017/cw-3',
     PORT: 7000
 };
