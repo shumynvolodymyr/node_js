@@ -2,7 +2,6 @@ const User = require('../db/User');
 const {createUserValidator, updateUserValidator} = require('../joi_validators/user.validator');
 
 module.exports = {
-
     searchIdMiddleware: async (req, res, next) => {
         try {
             const {user_id} = req.params;
