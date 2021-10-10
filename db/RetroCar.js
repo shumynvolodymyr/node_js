@@ -24,6 +24,13 @@ const RetroCarSchema = new Schema({
         required: true,
         trim: true,
         min: 0
+    },
+    password: {
+        type: String,
+        min: 8,
+        max: 128,
+        required: true,
+        trim: true
     }
 }, {timestamps: true});
 
