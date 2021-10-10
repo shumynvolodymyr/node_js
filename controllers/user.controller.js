@@ -4,7 +4,9 @@ const passwordService = require('../service/password.service');
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            res.json(await User.find());
+            const user = await User.find();
+
+            res.json(user);
         } catch (e) {
             res.json(e.message);
         }
@@ -48,7 +50,7 @@ module.exports = {
             const {user_id} = req.params;
             const password = await passwordService.hash(req.body.password);
 
-            await User.updateOne({user_id}, {$set: {password}});
+            await User.updateOne({_id: user_id}, {$set: {password}});
 
             res.json(`User ID: ${user_id} was updated`);
         } catch (e) {

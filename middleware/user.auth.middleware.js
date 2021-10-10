@@ -9,7 +9,7 @@ module.exports = {
             const user = await User.findOne({login}).select('+password');
 
             if (!user) {
-                throw new Error('Incorrect login or password');
+                throw new Error('Wrong login or password');
             }
 
             await passwordService.compare(password, user.password);
