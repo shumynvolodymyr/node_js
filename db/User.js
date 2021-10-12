@@ -25,6 +25,10 @@ const userSchema = new Schema({
         type: Number,
         trim: true
     },
+    status: {
+        type: Boolean,
+        default: false
+    },
     role: {
         type: String,
         default: userRolesEnum.USER,

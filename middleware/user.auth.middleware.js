@@ -46,5 +46,15 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+
+    isUserLoggedIn: (req, res, next) => {
+        const user = req.user;
+
+        if (user.status) {
+            throw new ErrorHandler(`${user.login}: You are authorized`, 409);
+        }
+
+        next();
     }
 };

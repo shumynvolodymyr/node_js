@@ -8,7 +8,13 @@ router.post(
     userAuthMiddleware.isLoginValid,
     userAuthMiddleware.isUserPresent,
     userAuthMiddleware.isPasswordMatched,
-    loginController.accountUser
+    userAuthMiddleware.isUserLoggedIn,
+    loginController.loginUser
+);
+
+router.post(
+    '/logout',
+    loginController.logoutUser
 );
 
 module.exports = router;
