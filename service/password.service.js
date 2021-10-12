@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 
+const ErrorHandler = require('../errors/ErrorHandler');
+
 const saltRounds = 10;
 
 module.exports = {
@@ -8,7 +10,7 @@ module.exports = {
         const isMatch = await bcrypt.compare(password, hashPassword);
 
         if (!isMatch) {
-            throw new Error('Wrong login or password');
+            throw new ErrorHandler('Wrong login or password', 404);
         }
     }
 };

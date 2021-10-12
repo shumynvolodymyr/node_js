@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const {PASSWORD_REGEXP} = require('../config/constants');
+const {constants: {PASSWORD_REGEXP}} = require('../config');
 
 const userAuthValidator = Joi.object({
     login: Joi

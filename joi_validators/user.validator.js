@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
-const {EMAIL_REGEXP, PASSWORD_REGEXP} = require('../config/constants');
-const userRoles = require('../config/user_roles.enum');
+const {constants: {EMAIL_REGEXP, PASSWORD_REGEXP}} = require('../config');
+const {userRolesEnum} = require('../config');
 
 const createUserValidator = Joi.object({
     login: Joi
@@ -26,7 +26,7 @@ const createUserValidator = Joi.object({
         .max(255),
     role: Joi
         .string()
-        .allow(...Object.values(userRoles))
+        .allow(...Object.values(userRolesEnum))
 });
 
 const updateUserValidator = Joi.object({

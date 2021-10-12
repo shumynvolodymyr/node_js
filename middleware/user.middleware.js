@@ -1,5 +1,6 @@
 const User = require('../db/User');
-const {createUserValidator, updateUserValidator} = require('../joi_validators/user.validator');
+const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
     searchIdMiddleware: async (req, res, next) => {
@@ -8,13 +9,14 @@ module.exports = {
             const user = await User.findById(user_id);
 
             if (!user) {
-                throw new Error('Not found user with this ID');
+                throw new ErrorHandler('Not found user with this ID', 404);
             }
 
             req.user = user;
+
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -23,14 +25,14 @@ module.exports = {
             const {error, value} = createUserValidator.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(error.details[0].message, 400);
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
@@ -41,18 +43,18 @@ module.exports = {
             const {error, value} = updateUserValidator.validate({password});
 
             if (error) {
-                throw new Error(error.details[0].message);
+                throw new ErrorHandler(error.details[0].message, 400);
             }
 
             if (email || login) {
-                throw new Error('You can change your email address or login only with administrator permission');
+                throw new ErrorHandler('You can change your email address or login only with administrator permission', 403);
             }
 
             req.body = value;
 
             next();
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 };

@@ -1,5 +1,6 @@
-const User = require('../db/User');
 const passwordService = require('../service/password.service');
+const User = require('../db/User');
+const {userNormalizeHandler} = require('../utils/userNormalizeHandler');
 
 module.exports = {
     getUsers: async (req, res) => {
@@ -14,7 +15,7 @@ module.exports = {
 
     getUserById: (req, res) => {
         try {
-            const user = req.user;
+            const {user} = req;
 
             res.json(user);
         } catch (e) {
@@ -24,11 +25,12 @@ module.exports = {
 
     createUsers: async (req, res) => {
         try {
-            const {password, login} = req.body;
+            const {password} = req.body;
             const hashedPassword = await passwordService.hash(password);
-            await User.create({...req.body, password: hashedPassword});
+            const user = await User.create({...req.body, password: hashedPassword});
+            const userNormalized = userNormalizeHandler(user.toJSON());
 
-            res.json(`User: ${login} was created`);
+            res.json(userNormalized);
         } catch (e) {
             res.json(e.message);
         }
