@@ -145,5 +145,9 @@ module.exports = {
         'use-isnan': 'error',
         'wrap-iife': 'error',
         yoda: 'error',
+        quotes: [
+            'error',
+            'single'
+        ],
     }
 };
