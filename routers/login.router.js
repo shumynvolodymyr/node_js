@@ -14,6 +14,7 @@ router.post(
 
 router.post(
     '/logout',
+    userAuthMiddleware.isLoginValid,
     userAuthMiddleware.isUserPresent,
     userAuthMiddleware.isPasswordMatched,
     loginController.logoutUser
