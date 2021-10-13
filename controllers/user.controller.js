@@ -54,7 +54,7 @@ module.exports = {
             const {user_id} = req.params;
             const password = await passwordService.hash(req.body.password);
 
-            await User.updateOne({_id: user_id}, {$set: {...req.body, password}}, {new: true});
+            await User.updateOne({_id: user_id}, {$set: {...req.body, password}});
 
             res.json(`User ID: ${user_id} was updated`);
         } catch (e) {
