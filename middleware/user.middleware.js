@@ -39,15 +39,16 @@ module.exports = {
     isUpdateBodyValid: (req, res, next) => {
 
         try {
-            const {login, password, email} = req.body;
-            const {error, value} = updateUserValidator.validate({password});
-
-            if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
-            }
+            const {login, email} = req.body;
 
             if (email || login) {
                 throw new ErrorHandler('You can change your email address or login only with administrator permission', 403);
+            }
+
+            const {error, value} = updateUserValidator.validate(req.body);
+
+            if (error) {
+                throw new ErrorHandler(error.details[0].message, 400);
             }
 
             req.body = value;
