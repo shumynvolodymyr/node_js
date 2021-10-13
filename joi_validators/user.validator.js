@@ -56,7 +56,6 @@ const updateUserValidator = Joi.object({
         .max(128),
     name: Joi
         .string()
-        .required()
         .trim()
         .min(3)
         .max(128),
