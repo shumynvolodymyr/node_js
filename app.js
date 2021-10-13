@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 const {config: {MONGO_URL, PORT}} = require('./config');
@@ -10,6 +11,8 @@ const app = express();
 mongoose.connect(MONGO_URL);
 
 app.use(express.json());
+app.use(express.static('images'));
+app.use(fileUpload({}));
 app.use(express.urlencoded({extended: true}));
 
 app.use('/login', loginRouter);

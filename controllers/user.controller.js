@@ -1,4 +1,5 @@
 const passwordService = require('../service/password.service');
+const fileService = require('../service/file.service');
 const User = require('../db/User');
 const {userNormalizeHandler} = require('../utils/userNormalizeHandler');
 
@@ -26,8 +27,10 @@ module.exports = {
     createUsers: async (req, res) => {
         try {
             const {password} = req.body;
+            const picture = req.files.picture;
             const hashedPassword = await passwordService.hash(password);
-            const user = await User.create({...req.body, password: hashedPassword});
+            const fileName = fileService.saveFile(picture);
+            const user = await User.create({...req.body, password: hashedPassword, picture: fileName});
             const userNormalized = userNormalizeHandler(user.toJSON());
 
             res.json(userNormalized);

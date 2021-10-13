@@ -7,23 +7,41 @@ const userSchema = new Schema({
         type: String,
         unique: true,
         required: true,
-        trim: true
+        trim: true,
+        minlength: 3,
+        maxlength: 32
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        select: false
+        select: false,
+        minlength: 8,
+        maxlength: 128
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 3,
+        maxlength: 128
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        trim: true
+        trim: true,
+        minlength: 5,
+        maxlength: 255
     },
     age: {
         type: Number,
-        trim: true
+        trim: true,
+        min: 0
+    },
+    picture: {
+        type: String,
+        trim:true
     },
     status: {
         type: Boolean,
