@@ -1,5 +1,4 @@
-const passwordService = require('../service/password.service');
-const fileService = require('../service/file.service');
+const {passwordService, fileService} = require('../service');
 const User = require('../db/User');
 const {userNormalizeHandler} = require('../utils/userNormalizeHandler');
 
