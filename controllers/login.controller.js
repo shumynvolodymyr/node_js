@@ -1,25 +1,27 @@
 const User = require('../db/User');
 
 module.exports = {
-    loginUser: async (req, res) => {
+    loginUser: async (req, res, next) => {
         try {
             const {login} = req.body;
+
             await User.updateOne({login}, {$set: {status: true}});
 
             res.json(`WELCOME ${login}`);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    logoutUser: async (req, res) => {
+    logoutUser: async (req, res, next) => {
         try {
             const {login} = req.body;
+
             await User.updateOne({login}, {$set: {status: false}});
 
             res.json(`Goodbye ${login}`);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     }
 };

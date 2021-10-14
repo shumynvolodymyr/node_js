@@ -1,6 +1,13 @@
 const User = require('../db/User');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
-const ErrorHandler = require('../errors/ErrorHandler');
+const {ErrorHandler} = require('../errors');
+const {
+    customError: {
+        NOT_FOUND_BY_ID,
+        NOT_VALID_FILE,
+        FORBIDDEN_USER_NOT_CONFIRMED
+    }
+} = require('../errors');
 
 module.exports = {
     searchIdMiddleware: async (req, res, next) => {
@@ -9,7 +16,7 @@ module.exports = {
             const user = await User.findById(user_id);
 
             if (!user) {
-                throw new ErrorHandler('Not found user with this ID', 404);
+                return next(new ErrorHandler(NOT_FOUND_BY_ID.message, NOT_FOUND_BY_ID.code));
             }
 
             req.user = user;
@@ -25,7 +32,7 @@ module.exports = {
             const {error, value} = createUserValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                return next(new ErrorHandler(error.details[0].message, NOT_VALID_FILE.code));
             }
 
             req.body = value;
@@ -40,14 +47,15 @@ module.exports = {
 
         try {
             const {login, password, email} = req.body;
+
+            if (email || login) {
+                return next(new ErrorHandler(FORBIDDEN_USER_NOT_CONFIRMED.message, FORBIDDEN_USER_NOT_CONFIRMED.code));
+            }
+
             const {error, value} = updateUserValidator.validate({password});
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
-            }
-
-            if (email || login) {
-                throw new ErrorHandler('You can change your email address or login only with administrator permission', 403);
+                return next(new ErrorHandler(error.details[0].message, NOT_VALID_FILE.code));
             }
 
             req.body = value;

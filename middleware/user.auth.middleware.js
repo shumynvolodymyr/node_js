@@ -1,7 +1,8 @@
+const {passwordService} = require('../service');
+const {User} = require('../db');
+const {ErrorHandler} = require('../errors');
 const {loginValidator: {userAuthValidator}} = require('../joi_validators');
-const passwordService = require('../service/password.service');
-const User = require('../db/User');
-const ErrorHandler = require('../errors/ErrorHandler');
+const {customError: {NOT_VALID_FILE, BAD_REQUEST_NOT_FOUND, BAD_REQUEST_USER_ACTIVATED}} = require('../errors');
 
 module.exports = {
     isLoginValid: (req, res, next) => {
@@ -9,7 +10,7 @@ module.exports = {
             const {error} = userAuthValidator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, 400);
+                return next(new ErrorHandler(error.details[0].message, NOT_VALID_FILE.code));
             }
 
             next();
@@ -24,7 +25,7 @@ module.exports = {
             const user = await User.findOne({login}).select('+password');
 
             if (!user) {
-                throw new ErrorHandler('Wrong login or password', 404);
+                return next(new ErrorHandler(BAD_REQUEST_NOT_FOUND.message, BAD_REQUEST_NOT_FOUND.code));
             }
 
             req.user = user;
@@ -52,7 +53,7 @@ module.exports = {
         const user = req.user;
 
         if (user.status) {
-            throw new ErrorHandler(`${user.login}: You are authorized`, 409);
+            return next(new ErrorHandler(BAD_REQUEST_USER_ACTIVATED.message, BAD_REQUEST_USER_ACTIVATED.code));
         }
 
         next();

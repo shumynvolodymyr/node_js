@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const ErrorHandler = require('../errors/ErrorHandler');
+const {ErrorHandler, customError: {BAD_REQUEST_NOT_FOUND}} = require('../errors');
 
 const saltRounds = 10;
 
@@ -10,7 +10,7 @@ module.exports = {
         const isMatch = await bcrypt.compare(password, hashPassword);
 
         if (!isMatch) {
-            throw new ErrorHandler('Wrong login or password', 404);
+            throw new ErrorHandler(BAD_REQUEST_NOT_FOUND.message, BAD_REQUEST_NOT_FOUND.code);
         }
     }
 };

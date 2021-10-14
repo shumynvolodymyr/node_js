@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+
 require('dotenv').config();
 
 const {config: {MONGO_URL, PORT}} = require('./config');

@@ -1,29 +1,29 @@
-const passwordService = require('../service/password.service');
-const User = require('../db/User');
-const {userNormalizeHandler} = require('../utils/userNormalizeHandler');
+const {passwordService} = require('../service');
+const {User} = require('../db');
+const {userNormalized: {userNormalizeHandler}} = require('../utils');
 
 module.exports = {
-    getUsers: async (req, res) => {
+    getUsers: async (req, res, next) => {
         try {
             const user = await User.find();
 
             res.json(user);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    getUserById: (req, res) => {
+    getUserById: (req, res, next) => {
         try {
             const {user} = req;
 
             res.json(user);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    createUsers: async (req, res) => {
+    createUsers: async (req, res, next) => {
         try {
             const {password} = req.body;
             const hashedPassword = await passwordService.hash(password);
@@ -32,22 +32,23 @@ module.exports = {
 
             res.json(userNormalized);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    deleteUsers: async (req, res) => {
+    deleteUsers: async (req, res, next) => {
         try {
             const {user_id} = req.params;
+
             await User.deleteOne({_id: user_id});
 
             res.json(`UserID: ${user_id} was deleted`);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     },
 
-    updateUser: async (req, res) => {
+    updateUser: async (req, res, next) => {
         try {
             const {user_id} = req.params;
             const password = await passwordService.hash(req.body.password);
@@ -56,7 +57,7 @@ module.exports = {
 
             res.json(`User ID: ${user_id} was updated`);
         } catch (e) {
-            res.json(e.message);
+            next(e);
         }
     }
 };
