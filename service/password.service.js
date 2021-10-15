@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
-const {ErrorHandler, customError: {BAD_REQUEST_NOT_FOUND}} = require('../errors');
+const {ErrorHandler, messagesEnum} = require('../errors');
+const {ResponseStatusCodesEnum} = require('../config');
 
 const saltRounds = 10;
 
@@ -10,7 +11,7 @@ module.exports = {
         const isMatch = await bcrypt.compare(password, hashPassword);
 
         if (!isMatch) {
-            throw new ErrorHandler(BAD_REQUEST_NOT_FOUND.message, BAD_REQUEST_NOT_FOUND.code);
+            throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.NOT_FOUND);
         }
     }
 };

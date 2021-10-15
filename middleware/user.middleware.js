@@ -1,13 +1,6 @@
 const User = require('../db/User');
-const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
-const {ErrorHandler} = require('../errors');
-const {
-    customError: {
-        NOT_FOUND_BY_ID,
-        NOT_VALID_FILE,
-        FORBIDDEN_USER_NOT_CONFIRMED
-    }
-} = require('../errors');
+const {ErrorHandler, messagesEnum} = require('../errors');
+const {ResponseStatusCodesEnum} = require('../config');
 
 module.exports = {
     searchIdMiddleware: async (req, res, next) => {
@@ -16,7 +9,7 @@ module.exports = {
             const user = await User.findById(user_id);
 
             if (!user) {
-                return next(new ErrorHandler(NOT_FOUND_BY_ID.message, NOT_FOUND_BY_ID.code));
+                throw new ErrorHandler(messagesEnum.NOT_FOUND_BY_ID, ResponseStatusCodesEnum.NOT_FOUND);
             }
 
             req.user = user;
@@ -27,12 +20,12 @@ module.exports = {
         }
     },
 
-    isUserBodyValid: (req, res, next) => {
+    isUserBodyValid: (validator) => (req, res, next) => {
         try {
-            const {error, value} = createUserValidator.validate(req.body);
+            const {error, value} = validator.validate(req.body);
 
             if (error) {
-                return next(new ErrorHandler(error.details[0].message, NOT_VALID_FILE.code));
+                throw new ErrorHandler(error.details[0].message, ResponseStatusCodesEnum.BAD_REQUEST);
             }
 
             req.body = value;
@@ -43,22 +36,14 @@ module.exports = {
         }
     },
 
-    isUpdateBodyValid: (req, res, next) => {
+    fieldValidation: (req, res, next) => {
 
         try {
-            const {login, password, email} = req.body;
+            const {login, email} = req.body;
 
             if (email || login) {
-                return next(new ErrorHandler(FORBIDDEN_USER_NOT_CONFIRMED.message, FORBIDDEN_USER_NOT_CONFIRMED.code));
+                throw new ErrorHandler(messagesEnum.FORBIDDEN_USER_NOT_CONFIRMED, ResponseStatusCodesEnum.FORBIDDEN);
             }
-
-            const {error, value} = updateUserValidator.validate({password});
-
-            if (error) {
-                return next(new ErrorHandler(error.details[0].message, NOT_VALID_FILE.code));
-            }
-
-            req.body = value;
 
             next();
         } catch (e) {

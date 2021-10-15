@@ -1,11 +1,12 @@
 const router = require('express').Router();
 
 const {loginController} = require('../controllers');
-const {userAuthMiddleware} = require('../middleware');
+const {userAuthMiddleware, userMiddleware} = require('../middleware');
+const {loginValidator: {userAuthValidator}} = require('../joi_validators');
 
 router.post(
     '/',
-    userAuthMiddleware.isLoginValid,
+    userMiddleware.isUserBodyValid(userAuthValidator),
     userAuthMiddleware.isUserPresent,
     userAuthMiddleware.isPasswordMatched,
     userAuthMiddleware.isUserLoggedIn,
@@ -14,7 +15,7 @@ router.post(
 
 router.post(
     '/logout',
-    userAuthMiddleware.isLoginValid,
+    userMiddleware.isUserBodyValid(userAuthValidator),
     userAuthMiddleware.isUserPresent,
     userAuthMiddleware.isPasswordMatched,
     loginController.logoutUser
