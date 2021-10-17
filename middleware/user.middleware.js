@@ -35,19 +35,4 @@ module.exports = {
             next(e);
         }
     },
-
-    fieldValidation: (req, res, next) => {
-
-        try {
-            const {login, email} = req.body;
-
-            if (email || login) {
-                throw new ErrorHandler(messagesEnum.FORBIDDEN_USER_NOT_CONFIRMED, ResponseStatusCodesEnum.FORBIDDEN);
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
 };
