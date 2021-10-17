@@ -16,7 +16,6 @@ router.post(
 
 router.put(
     '/:user_id',
-    userMiddleware.fieldValidation,
     userMiddleware.isUserBodyValid(updateUserValidator),
     userMiddleware.searchIdMiddleware,
     userController.updateUser
