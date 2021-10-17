@@ -9,7 +9,6 @@ router.post(
     userMiddleware.isUserBodyValid(userAuthValidator),
     userAuthMiddleware.isUserPresent,
     userAuthMiddleware.isPasswordMatched,
-    userAuthMiddleware.isUserLoggedIn,
     loginController.loginUser
 );
 

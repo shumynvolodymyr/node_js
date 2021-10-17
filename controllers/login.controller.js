@@ -1,23 +1,24 @@
-const User = require('../db/User');
+const {O_Auth} = require('../db');
+const {jwtService} = require('../service');
 
 module.exports = {
     loginUser: async (req, res, next) => {
         try {
-            const {login} = req.body;
+            const user = req.user;
 
-            await User.updateOne({login}, {$set: {status: true}});
+            const tokenPair = jwtService.generateTokenPair();
 
-            res.json(`WELCOME ${login}`);
+            await O_Auth.create({...tokenPair, user_id: user._id});
+
+            res.json(`WELCOME ${user.login}`);
         } catch (e) {
             next(e);
         }
     },
 
-    logoutUser: async (req, res, next) => {
+    logoutUser: (req, res, next) => {
         try {
             const {login} = req.body;
-
-            await User.updateOne({login}, {$set: {status: false}});
 
             res.json(`Goodbye ${login}`);
         } catch (e) {

@@ -34,14 +34,4 @@ module.exports = {
             next(e);
         }
     },
-
-    isUserLoggedIn: (req, res, next) => {
-        const user = req.user;
-
-        if (user.status) {
-            throw new ErrorHandler(messagesEnum.USER_ACTIVATED, ResponseStatusCodesEnum.CONFLICT);
-        }
-
-        next();
-    }
 };
