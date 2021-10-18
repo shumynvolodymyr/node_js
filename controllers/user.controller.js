@@ -2,6 +2,7 @@ const {passwordService} = require('../service');
 const {User} = require('../db');
 const {userNormalized: {userNormalizeHandler}} = require('../utils');
 const {ResponseStatusCodesEnum} = require('../config/');
+const {messagesEnum} = require('../errors');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -56,7 +57,7 @@ module.exports = {
 
             await User.updateOne({_id: user_id}, {$set: {password}});
 
-            res.sendStatus(ResponseStatusCodesEnum.CREATED);
+            res.status(ResponseStatusCodesEnum.CREATED).json(messagesEnum.UPDATE_USER);
         } catch (e) {
             next(e);
         }

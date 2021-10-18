@@ -1,6 +1,7 @@
 const {O_Auth} = require('../db');
 const {jwtService} = require('../service');
-const {tokenTypesEnum: {ACCESS, REFRESH}} = require('../config');
+const {tokenTypesEnum: {ACCESS, REFRESH}, ResponseStatusCodesEnum} = require('../config');
+const {messagesEnum} = require('../errors');
 
 module.exports = {
     loginUser: async (req, res, next) => {
@@ -19,12 +20,12 @@ module.exports = {
 
     logoutUser: async (req, res, next) => {
         try {
-            const {login} = req.body;
             const token = req.token;
 
             await O_Auth.deleteOne({[ACCESS]: token});
 
-            res.json(`Goodbye ${login}`);
+            res
+                .sendStatus(ResponseStatusCodesEnum.NO_CONTENT);
         } catch (e) {
             next(e);
         }
@@ -37,7 +38,10 @@ module.exports = {
 
             await O_Auth.updateOne({[REFRESH]: token}, {$set: {...tokenPair}});
 
-            res.json(tokenPair);
+            res
+                .status(ResponseStatusCodesEnum.CREATED)
+                .json(messagesEnum.UPDATE_USER);
+
         } catch (e) {
             next(e);
         }
