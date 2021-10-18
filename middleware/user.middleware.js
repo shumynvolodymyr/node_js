@@ -35,4 +35,25 @@ module.exports = {
             next(e);
         }
     },
+
+    checkUniqueData: async (req, res, next) => {
+        try {
+            const {login, email} = req.body;
+            const loginData = await User.findOne({login});
+
+            if (loginData) {
+                throw new ErrorHandler(messagesEnum.EXIST_LOGIN, ResponseStatusCodesEnum.CONFLICT);
+            }
+
+            const emailData = await User.findOne({email});
+
+            if (emailData) {
+                throw new ErrorHandler(messagesEnum.EXIST_EMAIL, ResponseStatusCodesEnum.CONFLICT);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };

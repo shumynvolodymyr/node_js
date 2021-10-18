@@ -15,10 +15,7 @@ router.post(
 
 router.post(
     '/logout',
-    userMiddleware.isUserBodyValid(userAuthValidator),
     userAuthMiddleware.checkToken(ACCESS),
-    userAuthMiddleware.isUserPresent,
-    userAuthMiddleware.isPasswordMatched,
     authController.logoutUser
 );
 router.post(

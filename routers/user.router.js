@@ -12,6 +12,7 @@ router.get(
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
+    userMiddleware.checkUniqueData,
     userController.createUsers
 );
 
@@ -19,6 +20,7 @@ router.put(
     '/:user_id',
     userMiddleware.isUserBodyValid(updateUserValidator),
     userMiddleware.searchIdMiddleware,
+    userAuthMiddleware.checkToken(ACCESS),
     userController.updateUser
 );
 router.get(

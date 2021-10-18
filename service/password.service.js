@@ -11,7 +11,7 @@ module.exports = {
         const isMatch = await bcrypt.compare(password, hashPassword);
 
         if (!isMatch) {
-            throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.NOT_FOUND);
+            throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.BAD_REQUEST);
         }
     }
 };

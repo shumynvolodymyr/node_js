@@ -1,5 +1,6 @@
 module.exports = {
-    USER_ACTIVATED: 'User is already activated',
+    EXIST_EMAIL: 'User with this email exist',
+    EXIST_LOGIN: 'User with this login exist',
     UPDATE_USER: 'Updated!',
     NOT_VALID_FILE: 'Not valid file',
     FORBIDDEN_USER_NOT_CONFIRMED: 'You can change your email address or login only with administrator permission',

@@ -23,8 +23,7 @@ module.exports = {
 
             await O_Auth.deleteOne({[ACCESS]: token});
 
-            res
-                .sendStatus(ResponseStatusCodesEnum.NO_CONTENT);
+            res.sendStatus(ResponseStatusCodesEnum.NO_CONTENT);
         } catch (e) {
             next(e);
         }

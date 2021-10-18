@@ -11,7 +11,7 @@ module.exports = {
             const user = await User.findOne({login}).select('+password');
 
             if (!user) {
-                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.NOT_FOUND);
+                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.BAD_REQUEST);
             }
 
             req.user = user;
