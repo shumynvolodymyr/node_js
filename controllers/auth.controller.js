@@ -7,7 +7,6 @@ module.exports = {
     loginUser: async (req, res, next) => {
         try {
             const user = req.user;
-
             const tokenPair = jwtService.generateTokenPair();
 
             await O_Auth.create({...tokenPair, user_id: user._id});
@@ -38,10 +37,7 @@ module.exports = {
 
             await O_Auth.updateOne({[REFRESH]: token}, {$set: {...tokenPair}});
 
-            res
-                .status(ResponseStatusCodesEnum.CREATED)
-                .json(messagesEnum.UPDATE_USER);
-
+            res.status(ResponseStatusCodesEnum.CREATED).json(messagesEnum.UPDATE_USER);
         } catch (e) {
             next(e);
         }
