@@ -1,4 +1,4 @@
 module.exports = {
-    ACCESS: 'access',
-    REFRESH: 'refresh'
+    ACCESS: 'access_token',
+    REFRESH: 'refresh_token'
 };

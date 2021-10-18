@@ -13,7 +13,7 @@ module.exports = {
         };
     },
 
-    verifyToken: async (token, tokenType = 'access') => {
+    verifyToken: async (token, tokenType) => {
         try {
             const secret = tokenType === ACCESS ? config.JWT_SECRET : config.JWT_REFRESH_SECRET;
 

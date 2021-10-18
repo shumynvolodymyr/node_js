@@ -1,7 +1,7 @@
-const {passwordService} = require('../service');
-const {User} = require('../db');
+const {passwordService, jwtService} = require('../service');
+const {User, O_Auth} = require('../db');
 const {ErrorHandler, messagesEnum} = require('../errors');
-const {ResponseStatusCodesEnum} = require('../config');
+const {ResponseStatusCodesEnum, constants: {AUTHORIZATION}} = require('../config');
 
 module.exports = {
 
@@ -34,4 +34,29 @@ module.exports = {
             next(e);
         }
     },
+
+    checkToken: (tokenType) => async (req, res, next) => {
+        try {
+            const token = req.get(AUTHORIZATION);
+
+            if (!token) {
+                throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
+            }
+
+            await jwtService.verifyToken(token, tokenType);
+
+            const tokenResponse = await O_Auth.findOne({[tokenType]: token}).populate('user_id');
+
+            if (!tokenResponse) {
+                throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
+            }
+
+            res.user = tokenResponse.user_id;
+            req.token = token;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 };

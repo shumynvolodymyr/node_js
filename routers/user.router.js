@@ -1,8 +1,9 @@
 const router = require('express').Router();
 
 const {userController} = require('../controllers');
-const {userMiddleware} = require('../middleware');
+const {userMiddleware, userAuthMiddleware} = require('../middleware');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
+const {tokenTypesEnum: {ACCESS}} = require('../config');
 
 router.get(
     '/',
@@ -16,7 +17,6 @@ router.post(
 
 router.put(
     '/:user_id',
-    userMiddleware.fieldValidation,
     userMiddleware.isUserBodyValid(updateUserValidator),
     userMiddleware.searchIdMiddleware,
     userController.updateUser
@@ -29,6 +29,7 @@ router.get(
 router.delete(
     '/:user_id',
     userMiddleware.searchIdMiddleware,
+    userAuthMiddleware.checkToken(ACCESS),
     userController.deleteUsers
 );
 
