@@ -2,11 +2,9 @@ const nodemailer = require('nodemailer');
 const EmailTemplates = require('email-templates');
 const path = require('path');
 
-const {config: {EMAIL_SERVICE, EMAIL_USER, EMAIL_PASS}} = require('../config');
+const {config: {EMAIL_SERVICE, EMAIL_USER, EMAIL_PASS}, ResponseStatusCodesEnum: {NOT_FOUND}} = require('../config');
+const {ErrorHandler, messagesEnum: {WRONG_TEMPLATE}} = require('../errors');
 const allTemplates = require('../email_templates');
-const {ErrorHandler} = require('../errors');
-const {messagesEnum: {WRONG_TEMPLATE}} = require('../errors');
-const {ResponseStatusCodesEnum: {NOT_FOUND}} = require('../config');
 
 const templateParser = new EmailTemplates({
     views: {
