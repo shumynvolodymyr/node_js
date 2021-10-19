@@ -6,5 +6,9 @@ module.exports = {
     ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME || '20m',
 
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'Refresh_secret_key',
-    REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME || '30d'
+    REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME || '30d',
+
+    EMAIL_SERVICE: process.env.SERVER || 'gmail',
+    EMAIL_USER: process.env.EMAIL_USER || 'email@gmail.com',
+    EMAIL_PASS: process.env.EMAIL_PASS || '777',
 };

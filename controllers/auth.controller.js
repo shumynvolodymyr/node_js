@@ -1,6 +1,6 @@
 const {O_Auth} = require('../db');
-const {jwtService} = require('../service');
-const {tokenTypesEnum: {ACCESS, REFRESH}, ResponseStatusCodesEnum} = require('../config');
+const {jwtService, mailService: {sendMail}} = require('../service');
+const {tokenTypesEnum: {ACCESS, REFRESH}, ResponseStatusCodesEnum, emailActionEnum} = require('../config');
 const {messagesEnum} = require('../errors');
 
 module.exports = {
@@ -10,6 +10,7 @@ module.exports = {
             const tokenPair = jwtService.generateTokenPair();
 
             await O_Auth.create({...tokenPair, user_id: user._id});
+            await sendMail(user.email, emailActionEnum.LOGIN, {userName: user.login});
 
             res.json({...tokenPair, id: user._id});
         } catch (e) {
