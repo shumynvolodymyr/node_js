@@ -25,6 +25,11 @@ const userSchema = new Schema({
         type: Number,
         trim: true
     },
+    is_active: {
+        type: Boolean,
+        trim: true,
+        default: false
+    },
     role: {
         type: String,
         default: userRolesEnum.USER,

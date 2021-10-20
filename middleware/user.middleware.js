@@ -25,7 +25,7 @@ module.exports = {
             const {error, value} = validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(error.details[0].message, ResponseStatusCodesEnum.BAD_REQUEST);
+                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.BAD_REQUEST);
             }
 
             req.body = value;
@@ -49,6 +49,20 @@ module.exports = {
 
             if (emailData) {
                 throw new ErrorHandler(messagesEnum.EXIST_EMAIL, ResponseStatusCodesEnum.CONFLICT);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    isUserActive: (req, res, next) => {
+        try {
+            const {user} = req;
+
+            if (!user.is_active) {
+                throw new ErrorHandler(messagesEnum.NOT_ACTIVATED, ResponseStatusCodesEnum.FORBIDDEN);
             }
 
             next();

@@ -1,4 +1,4 @@
-const {O_Auth} = require('../db');
+const {O_Auth, User} = require('../db');
 const {jwtService, mailService: {sendMail}} = require('../service');
 const {tokenTypesEnum: {ACCESS, REFRESH}, ResponseStatusCodesEnum, emailActionEnum} = require('../config');
 const {messagesEnum} = require('../errors');
@@ -41,5 +41,17 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    activateController: async (req, res, next) => {
+        try {
+            const {_id} = req.user;
+
+            await User.updateOne({_id}, {$set: {is_active: true}});
+
+            res.status(ResponseStatusCodesEnum.OK).json(messagesEnum.SUCCESSFULLY_ACTIVATED);
+        } catch (e) {
+            next(e);
+        }
+    },
 };

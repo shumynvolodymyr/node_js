@@ -10,8 +10,12 @@ module.exports = {
 
     NOT_VALID_FILE: 'Not valid file',
     NOT_FOUND_BY_ID: 'Not found user with this ID',
+    NOT_ACTIVATED: 'User is not activated',
+
+    SUCCESSFULLY_ACTIVATED: 'Successfully activated',
 
     UPDATE_USER: 'Updated!',
 
     WRONG_TEMPLATE: 'Wrong template',
+    WRONG_TOKEN_TYPE: 'Wrong token type',
 };

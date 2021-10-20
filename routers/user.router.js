@@ -5,10 +5,6 @@ const {userMiddleware, userAuthMiddleware} = require('../middleware');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
 const {tokenTypesEnum: {ACCESS}} = require('../config');
 
-router.get(
-    '/',
-    userController.getUsers
-);
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
@@ -16,11 +12,14 @@ router.post(
     userController.createUsers
 );
 
+router.use(userAuthMiddleware.checkToken(ACCESS), userMiddleware.isUserActive);
+
+router.get('/', userController.getUsers);
+
 router.put(
     '/:user_id',
     userMiddleware.isUserBodyValid(updateUserValidator),
     userMiddleware.searchIdMiddleware,
-    userAuthMiddleware.checkToken(ACCESS),
     userController.updateUser
 );
 router.get(
@@ -31,7 +30,6 @@ router.get(
 router.delete(
     '/:user_id',
     userMiddleware.searchIdMiddleware,
-    userAuthMiddleware.checkToken(ACCESS),
     userController.deleteUsers
 );
 

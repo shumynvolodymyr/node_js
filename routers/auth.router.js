@@ -3,7 +3,13 @@ const router = require('express').Router();
 const {authController} = require('../controllers');
 const {userAuthMiddleware, userMiddleware} = require('../middleware');
 const {loginValidator: {userAuthValidator}} = require('../joi_validators');
-const {tokenTypesEnum: {REFRESH, ACCESS}} = require('../config');
+const {tokenTypesEnum: {REFRESH, ACCESS, ACTION_TOKEN}} = require('../config');
+
+router.get(
+    '/activate/:token',
+    userAuthMiddleware.checkActivateToken(ACTION_TOKEN),
+    authController.activateController
+);
 
 router.post(
     '/',

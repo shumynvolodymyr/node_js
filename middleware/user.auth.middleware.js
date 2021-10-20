@@ -1,5 +1,5 @@
 const {passwordService, jwtService} = require('../service');
-const {User, O_Auth} = require('../db');
+const {User, O_Auth, Action} = require('../db');
 const {ErrorHandler, messagesEnum} = require('../errors');
 const {ResponseStatusCodesEnum, constants: {AUTHORIZATION}} = require('../config');
 
@@ -45,13 +45,39 @@ module.exports = {
 
             await jwtService.verifyToken(token, tokenType);
 
-            const tokenResponse = await O_Auth.findOne({[tokenType]: token}).populate('user_id');
+            const {user_id: user} = await O_Auth.findOne({[tokenType]: token}).populate('user_id');
 
-            if (!tokenResponse) {
+            if (!user) {
                 throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
             }
 
-            res.user = tokenResponse.user_id;
+            req.user = user;
+            req.token = token;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkActivateToken: (tokenType) => async (req, res, next) => {
+        try {
+            const {token} = req.params;
+
+            if (!token) {
+                throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
+            }
+            await jwtService.verifyToken(token, tokenType);
+
+            const {_id, user_id: user} = await Action.findOne({[tokenType]: token}).populate('user_id');
+
+            if (!user) {
+                throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
+            }
+
+            await Action.deleteOne({_id});
+
+            req.user = user;
             req.token = token;
 
             next();

@@ -1,7 +1,7 @@
-const {passwordService, mailService: {sendMail}} = require('../service');
-const {User} = require('../db');
+const {passwordService, mailService: {sendMail}, jwtService} = require('../service');
+const {User, Action} = require('../db');
 const {userNormalized: {userNormalizeHandler}} = require('../utils');
-const {ResponseStatusCodesEnum, emailActionEnum} = require('../config/');
+const {ResponseStatusCodesEnum, emailActionEnum, tokenTypesEnum, config} = require('../config/');
 const {messagesEnum} = require('../errors');
 
 module.exports = {
@@ -31,8 +31,11 @@ module.exports = {
             const hashedPassword = await passwordService.hash(password);
             const user = await User.create({...req.body, password: hashedPassword});
             const userNormalized = userNormalizeHandler(user.toJSON());
+            const action_token = jwtService.generateActivateToken(tokenTypesEnum.ACTION_TOKEN);
+            const activatePasswordUrl = config.BASE_URL + config.ACTIVATE_URL + '/' + action_token;
 
-            await sendMail(email, emailActionEnum.USER_CREATED, {login, password});
+            await Action.create({action_token, type: tokenTypesEnum.ACTION_TOKEN, user_id: userNormalized._id});
+            await sendMail(email, emailActionEnum.USER_CREATED, {login, password, activatePasswordUrl});
 
             res.json(userNormalized);
         } catch (e) {
