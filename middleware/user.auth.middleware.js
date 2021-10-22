@@ -1,33 +1,19 @@
-const {passwordService, jwtService} = require('../service');
+const {jwtService} = require('../service');
 const {User, O_Auth, Action} = require('../db');
 const {ErrorHandler, messagesEnum} = require('../errors');
 const {ResponseStatusCodesEnum, constants: {AUTHORIZATION}} = require('../config');
 
 module.exports = {
 
-    isUserPresent: async (req, res, next) => {
+    isUserPresent: (fieldForChecks) => async (req, res, next) => {
         try {
-            const {login} = req.body;
-            const user = await User.findOne({login}).select('+password');
+            const user = await User.findOne({[fieldForChecks]: req.body[fieldForChecks]}).select('+password');
 
             if (!user) {
-                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.BAD_REQUEST);
+                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.NOT_FOUND);
             }
 
             req.user = user;
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
-    isPasswordMatched: async (req, res, next) => {
-        try {
-            const {password} = req.body;
-            const hashPassword = req.user.password;
-
-            await passwordService.compare(password, hashPassword);
 
             next();
         } catch (e) {

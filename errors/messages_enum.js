@@ -1,9 +1,10 @@
 module.exports = {
-    BAD_REQUEST_NOT_FOUND: 'Wrong login or password',
+    BAD_REQUEST_NOT_FOUND: 'User not found / Wrong data.',
 
     EXIST_EMAIL: 'User with this email exist',
     EXIST_LOGIN: 'User with this login exist',
 
+    FORGOT_PASSWORD_EMAIL: 'Password recovery email sent successfully!',
     FORBIDDEN_USER_NOT_CONFIRMED: 'You can change your email address or login only with administrator permission',
 
     INVALID_TOKEN: 'Invalid token',

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const {
     config,
     ResponseStatusCodesEnum: {UNAUTHORIZED, SERVER},
-    tokenTypesEnum: {ACCESS, REFRESH, ACTION_TOKEN}
+    tokenTypesEnum: {ACCESS, REFRESH, ACTION_TOKEN, FORGOT_PASSWORD}
 } = require('../config');
 const {ErrorHandler, messagesEnum: {INVALID_TOKEN, WRONG_TOKEN_TYPE}} = require('../errors');
 
@@ -31,6 +31,9 @@ module.exports = {
                 case ACTION_TOKEN:
                     secret = config.JWT_ACTION_SECRET;
                     break;
+                case FORGOT_PASSWORD:
+                    secret = config.JWT_ACTION_SECRET_FORGOT;
+                    break;
                 default:
                     throw new ErrorHandler(WRONG_TOKEN_TYPE, SERVER);
             }
@@ -48,6 +51,11 @@ module.exports = {
             case ACTION_TOKEN:
                 secret = config.JWT_ACTION_SECRET;
                 break;
+            case FORGOT_PASSWORD:
+                secret = config.JWT_ACTION_SECRET_FORGOT;
+                break;
+            default:
+                throw new ErrorHandler(WRONG_TOKEN_TYPE, SERVER);
         }
 
         return jwt.sign({}, secret, {expiresIn: config.ACTION_TOKEN_LIFETIME});

@@ -1,6 +1,8 @@
 const {Schema, model} = require('mongoose');
 
 const {userRolesEnum, dbTablesEnum: {USERS}} = require('../config');
+const {passwordService} = require('../service');
+const {sendMail} = require('../service/mail.service');
 
 const userSchema = new Schema({
     login: {
@@ -37,5 +39,29 @@ const userSchema = new Schema({
     },
     versionKey: false
 }, {timestamps: true, versionKey: false});
+
+userSchema.methods = {
+    comparePassword(password) {
+        return passwordService.compare(password, this.password);
+    },
+
+    sendMail(action, context) {
+        return sendMail(this.email, action, context);
+    },
+};
+
+userSchema.statics = {
+    async createUserWithPassword(userObj) {
+        const password = await passwordService.hash(userObj.password);
+
+        return this.create({...userObj, password});
+    },
+
+    async updateUserWithNewPassword(_id, newPassword) {
+        const password = await passwordService.hash(newPassword);
+
+        return this.updateOne({_id}, {$set: {password}});
+    }
+};
 
 module.exports = model(USERS, userSchema);

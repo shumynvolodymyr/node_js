@@ -2,20 +2,13 @@ const router = require('express').Router();
 
 const {authController} = require('../controllers');
 const {userAuthMiddleware, userMiddleware} = require('../middleware');
-const {loginValidator: {userAuthValidator}} = require('../joi_validators');
-const {tokenTypesEnum: {REFRESH, ACCESS, ACTION_TOKEN}} = require('../config');
-
-router.get(
-    '/activate/:token',
-    userAuthMiddleware.checkActivateToken(ACTION_TOKEN),
-    authController.activateController
-);
+const {loginValidator: {userAuthValidator}, userValidator} = require('../joi_validators');
+const {tokenTypesEnum: {REFRESH, ACCESS, ACTION_TOKEN, FORGOT_PASSWORD}, constants} = require('../config');
 
 router.post(
     '/',
     userMiddleware.isUserBodyValid(userAuthValidator),
-    userAuthMiddleware.isUserPresent,
-    userAuthMiddleware.isPasswordMatched,
+    userAuthMiddleware.isUserPresent(constants.LOGIN),
     authController.loginUser
 );
 
@@ -28,6 +21,25 @@ router.post(
     '/refresh',
     userAuthMiddleware.checkToken(REFRESH),
     authController.refreshTokenController
+);
+
+router.get(
+    '/activate/:token',
+    userAuthMiddleware.checkActivateToken(ACTION_TOKEN),
+    authController.activateController
+);
+
+router.post(
+    '/password/forgot',
+    userAuthMiddleware.isUserPresent(constants.EMAIL),
+    authController.sendEmailForgotPassword
+);
+
+router.put(
+    '/password/forgot/:token',
+    userMiddleware.isUserBodyValid(userValidator.updateUserValidator),
+    userAuthMiddleware.checkActivateToken(FORGOT_PASSWORD),
+    authController.setNewPassword,
 );
 
 module.exports = router;

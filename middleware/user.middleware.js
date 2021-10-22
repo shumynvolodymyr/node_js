@@ -6,7 +6,7 @@ module.exports = {
     searchIdMiddleware: async (req, res, next) => {
         try {
             const {user_id} = req.params;
-            const user = await User.findById(user_id);
+            const user = await User.findById({_id: user_id});
 
             if (!user) {
                 throw new ErrorHandler(messagesEnum.NOT_FOUND_BY_ID, ResponseStatusCodesEnum.NOT_FOUND);
