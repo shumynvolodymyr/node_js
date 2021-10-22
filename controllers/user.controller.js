@@ -1,5 +1,5 @@
 const {passwordService, jwtService} = require('../service');
-const {User, Action} = require('../db');
+const {User, Action, O_Auth} = require('../db');
 const {userNormalized: {userNormalizeHandler}} = require('../utils');
 const {ResponseStatusCodesEnum, emailActionEnum, tokenTypesEnum, config} = require('../config/');
 const {messagesEnum} = require('../errors');
@@ -48,6 +48,7 @@ module.exports = {
             const {user} = req;
 
             await User.deleteOne({_id: user_id});
+            await O_Auth.deleteMany({user_id});
             await user.sendMail(emailActionEnum.USER_DELETED, {userName: user.login});
 
             res.sendStatus(ResponseStatusCodesEnum.NO_CONTENT);
