@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const {authController} = require('../controllers');
 const {userAuthMiddleware, userMiddleware} = require('../middleware');
-const {loginValidator: {userAuthValidator}, userValidator} = require('../joi_validators');
+const {loginValidator: {userAuthValidator}} = require('../joi_validators');
 const {tokenTypesEnum: {REFRESH, ACCESS, ACTION_TOKEN, FORGOT_PASSWORD}, constants} = require('../config');
 
 router.post(
@@ -37,7 +37,7 @@ router.post(
 
 router.put(
     '/password/forgot/:token',
-    userMiddleware.isUserBodyValid(userValidator.updateUserValidator),
+    userAuthMiddleware.checkPasswordValid,
     userAuthMiddleware.checkActivateToken(FORGOT_PASSWORD),
     authController.setNewPassword,
 );

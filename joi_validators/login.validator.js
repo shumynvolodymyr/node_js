@@ -18,4 +18,14 @@ const userAuthValidator = Joi.object({
         .trim(),
 });
 
-module.exports = {userAuthValidator};
+const passwordValidator = Joi.object({
+    password: Joi
+        .string()
+        .regex(PASSWORD_REGEXP)
+        .min(8)
+        .max(128)
+        .required()
+        .trim(),
+});
+
+module.exports = {userAuthValidator, passwordValidator};

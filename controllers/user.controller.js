@@ -1,4 +1,4 @@
-const {passwordService, jwtService} = require('../service');
+const {jwtService} = require('../service');
 const {User, Action, O_Auth} = require('../db');
 const {userNormalized: {userNormalizeHandler}} = require('../utils');
 const {ResponseStatusCodesEnum, emailActionEnum, tokenTypesEnum, config} = require('../config/');
@@ -61,9 +61,8 @@ module.exports = {
         try {
             const {user_id} = req.params;
             const {user} = req;
-            const password = await passwordService.hash(req.body.password);
 
-            await User.updateOne({_id: user_id}, {$set: {password}});
+            await User.updateOne({_id: user_id}, {$set: {...req.body}});
             await user.sendMail(emailActionEnum.USER_UPDATED, user.login);
 
             res.status(ResponseStatusCodesEnum.CREATED).json(messagesEnum.UPDATE_USER);

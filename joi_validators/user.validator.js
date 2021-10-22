@@ -10,6 +10,12 @@ const createUserValidator = Joi.object({
         .alphanum()
         .min(3)
         .max(32),
+    name: Joi
+        .string()
+        .min(3)
+        .max(32)
+        .trim()
+        .required(),
     password: Joi
         .string()
         .regex(PASSWORD_REGEXP)
@@ -30,13 +36,15 @@ const createUserValidator = Joi.object({
 });
 
 const updateUserValidator = Joi.object({
-    password: Joi
+    name: Joi
         .string()
-        .regex(PASSWORD_REGEXP)
-        .min(8)
-        .max(128)
-        .required()
-        .trim(),
+        .min(3)
+        .max(32)
+        .trim()
+        .required(),
+    role: Joi
+        .string()
+        .allow(...Object.values(userRolesEnum))
 });
 
 module.exports = {createUserValidator, updateUserValidator};

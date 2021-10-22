@@ -5,6 +5,14 @@ const {passwordService} = require('../service');
 const {sendMail} = require('../service/mail.service');
 
 const userSchema = new Schema({
+    name: {
+        type: String,
+        unique: true,
+        required: true,
+        trim: true,
+        minlength: 3,
+        maxlength: 32,
+    },
     login: {
         type: String,
         unique: true,
