@@ -55,7 +55,7 @@ module.exports = {
             }
             await jwtService.verifyToken(token, tokenType);
 
-            const response = await Action.findOne({[tokenType]: token});
+            const response = await Action.findOne({action_token: token});
 
             if (!response) {
                 throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
