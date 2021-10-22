@@ -19,4 +19,8 @@ const oAuthSchema = new Schema({
     versionKey: false
 }, {timestamps: true, versionKey: false});
 
+oAuthSchema.pre('findOne', function() {
+    this.populate('user_id');
+});
+
 module.exports = model(O_AUTH, oAuthSchema);

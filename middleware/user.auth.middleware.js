@@ -31,13 +31,13 @@ module.exports = {
 
             await jwtService.verifyToken(token, tokenType);
 
-            const {user_id: user} = await O_Auth.findOne({[tokenType]: token}).populate('user_id');
+            const response = await O_Auth.findOne({[tokenType]: token});
 
-            if (!user) {
+            if (!response) {
                 throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
             }
 
-            req.user = user;
+            req.user = response.user_id;
             req.token = token;
 
             next();
@@ -55,15 +55,15 @@ module.exports = {
             }
             await jwtService.verifyToken(token, tokenType);
 
-            const {_id, user_id: user} = await Action.findOne({[tokenType]: token}).populate('user_id');
+            const response = await Action.findOne({[tokenType]: token});
 
-            if (!user) {
+            if (!response) {
                 throw new ErrorHandler(messagesEnum.INVALID_TOKEN, ResponseStatusCodesEnum.UNAUTHORIZED);
             }
 
-            await Action.deleteOne({_id});
+            await Action.deleteOne({_id: response._id});
 
-            req.user = user;
+            req.user = response.user_id;
             req.token = token;
 
             next();

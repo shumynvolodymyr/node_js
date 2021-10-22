@@ -64,7 +64,7 @@ module.exports = {
             const password = await passwordService.hash(req.body.password);
 
             await User.updateOne({_id: user_id}, {$set: {password}});
-            await user.sendMail(emailActionEnum.USER_UPDATED, [user.login]);
+            await user.sendMail(emailActionEnum.USER_UPDATED, user.login);
 
             res.status(ResponseStatusCodesEnum.CREATED).json(messagesEnum.UPDATE_USER);
         } catch (e) {

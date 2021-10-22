@@ -22,4 +22,8 @@ const actionSchema = new Schema({
     versionKey: false
 }, {timestamps: true, versionKey: false});
 
+actionSchema.pre('findOne', function() {
+    this.populate('user_id');
+});
+
 module.exports = model(ACTION, actionSchema);
