@@ -1,6 +1,8 @@
 module.exports = {
     BAD_REQUEST_NOT_FOUND: 'User not found / Wrong data.',
 
+    CORS_NOT_ALLOWED: 'CORS is not allowed',
+
     EXIST_EMAIL: 'User with this email exist',
     EXIST_LOGIN: 'User with this login exist',
 

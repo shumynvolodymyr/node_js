@@ -1,4 +1,6 @@
 module.exports = {
+    NODE_ENV: process.env.NODE_ENV || 'dev',
+
     BASE_URL: process.env.BASE_URL || 'http://localhost:7000/',
     ACTIVATE_URL: 'http://localhost:7000/auth/activate/',
     FORGOT_PASSWORD_URL: 'http://localhost:7000/auth/password/forgot/',
@@ -17,4 +19,9 @@ module.exports = {
     EMAIL_SERVICE: process.env.SERVER || 'gmail',
     EMAIL_USER: process.env.EMAIL_USER || 'email@gmail.com',
     EMAIL_PASS: process.env.EMAIL_PASS || '777',
+
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@gmail.com',
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || '777HnL77',
+
+    ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:7000',
 };
