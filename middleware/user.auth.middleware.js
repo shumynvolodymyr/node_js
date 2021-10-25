@@ -2,7 +2,6 @@ const {jwtService} = require('../service');
 const {User, O_Auth, Action} = require('../db');
 const {ErrorHandler, messagesEnum} = require('../errors');
 const {ResponseStatusCodesEnum, constants: {AUTHORIZATION}} = require('../config');
-const {loginValidator} = require('../joi_validators');
 
 module.exports = {
 
@@ -72,20 +71,4 @@ module.exports = {
             next(e);
         }
     },
-
-    checkPasswordValid: (req, res, next) => {
-        try {
-            const {error, value} = loginValidator.passwordValidator.validate(req.body);
-
-            if (error) {
-                throw new Error(error.details[0].message, ResponseStatusCodesEnum.BAD_REQUEST);
-            }
-
-            req.body = value;
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    }
 };

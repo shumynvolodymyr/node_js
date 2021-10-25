@@ -25,7 +25,7 @@ module.exports = {
             const {error, value} = validator.validate(req.body);
 
             if (error) {
-                throw new ErrorHandler(messagesEnum.BAD_REQUEST_NOT_FOUND, ResponseStatusCodesEnum.BAD_REQUEST);
+                throw new ErrorHandler(error.details[0].message, ResponseStatusCodesEnum.BAD_REQUEST);
             }
 
             req.body = value;
