@@ -1,0 +1,246 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Swagger myStore",
+    "version": "1.0",
+    "description": "This is a sample server myStore server.",
+    "contact": {
+      "name": "Ok10",
+      "email": "dev@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getUsers",
+        "description": "GET all users",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Ths is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "createUsers",
+        "description": "This is how to create new user",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "default": "David",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "login",
+            "in": "formData",
+            "default": "login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "default": "email@example.com",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "default": "Pa$$w0rd",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getUser",
+        "description": "Get a specific user by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "This is `user_id` which the user receives at registration",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid `user_id` or `access_token` supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "updateUser",
+        "description": "This is how to update a specific user by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "This is `user_id` which the user receives at registration",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "default": "UserName",
+            "description": "New name user for update",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid `user_id` or `access_token` supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "deleteUser",
+        "description": "This is how to delete user by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "This is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "This is `user_id` which the user receives at registration",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid `user_id` or `access_token` supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "75736f8a558f7",
+          "description": "MongoDB ID"
+        },
+        "name": {
+          "type": "string",
+          "example": "Name"
+        },
+        "login": {
+          "type": "string",
+          "example": "Your login"
+        },
+        "email": {
+          "type": "string",
+          "example": "user@gmail.com"
+        },
+        "age": {
+          "type": "number",
+          "example": 18
+        },
+        "is_active": {
+          "type": "boolean",
+          "example": true
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    }
+  }
+}
