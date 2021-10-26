@@ -32,6 +32,12 @@
             "schema": {
               "$ref": "#/definitions/ApiResponse"
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
           }
         }
       },
@@ -80,7 +86,10 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#definitions/badRequestError"
+            }
           }
         }
       }
@@ -116,10 +125,16 @@
             }
           },
           "400": {
-            "description": "Invalid `user_id` or `access_token` supplied"
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#definitions/badRequestError"
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#definitions/notFoundError"
+            }
           }
         }
       },
@@ -161,10 +176,16 @@
             }
           },
           "400": {
-            "description": "Invalid `user_id` or `access_token` supplied"
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#definitions/badRequestError"
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#definitions/notFoundError"
+            }
           }
         }
       },
@@ -192,16 +213,229 @@
         ],
         "responses": {
           "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#definitions/badRequestError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#definitions/notFoundError"
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "userLogin",
+        "description": "This is How to sign in the user's account",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "formData",
+            "default": "login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "default": "Pa$$w0rd",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "Success",
             "schema": {
-              "$ref": "#/definitions/ApiResponse"
+              "type": "object",
+              "$ref": "#/definitions/loginResponse"
             }
           },
           "400": {
-            "description": "Invalid `user_id` or `access_token` supplied"
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#definitions/badRequestError"
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#definitions/notFoundError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "userLogout",
+        "description": "This is How to sign out the user's account",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Ths is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "refreshToken",
+        "description": "How to refresh user's token",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Ths is `refresh_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/activate/{token}": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "activateUserAccount",
+        "description": "How to activate user's account",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "This is `access_token` from POST /auth endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "forgotPassword",
+        "description": "How to forgot password",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "This is user `email` which he indicated during registration",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "properties": {
+                "msg": {
+                  "type": "string",
+                  "example": "http://localhost:7000/auth/password/forgot/{forgot_password_token}"
+                },
+                "code": {
+                  "type": "number",
+                  "example": 201
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/notFoundError"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot/{forgot_password_token}": {
+      "put": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "repairPassword",
+        "description": "How to repair password",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "This is new `password`",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "forgot_password_token",
+            "in": "path",
+            "description": "This is `forgot_password_token`",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated!"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
           }
         }
       }
@@ -239,6 +473,70 @@
         "role": {
           "type": "string",
           "example": "user"
+        },
+        "action_token": {
+          "type": "string",
+          "example": "75736f8a558f7gfs",
+          "description": "Action token"
+        }
+      }
+    },
+    "loginResponse": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "75736f8a558f7",
+          "description": "MongoDB ID"
+        },
+        "access_token": {
+          "type": "string",
+          "example": "75736f8a558f7gfs",
+          "description": "Access token"
+        },
+        "refresh_token": {
+          "type": "string",
+          "example": "75736f8a558f7gfs",
+          "description": "Refresh token"
+        }
+      }
+    },
+    "badRequestError": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "something went wrong"
+        },
+        "code": {
+          "type": "number",
+          "example": 400
+        }
+      }
+    },
+    "notFoundError": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "User not found"
+        },
+        "code": {
+          "type": "number",
+          "example": 404
+        }
+      }
+    },
+    "unauthorizedError": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Invalid token"
+        },
+        "code": {
+          "type": "number",
+          "example": 401
         }
       }
     }

@@ -36,7 +36,7 @@ module.exports = {
             await Action.create({action_token, type: tokenTypesEnum.ACTION_TOKEN, user_id: userNormalized._id});
             await user.sendMail(emailActionEnum.USER_CREATED, {login, password, activatePasswordUrl});
 
-            res.json(userNormalized);
+            res.json({userNormalized, action_token});
         } catch (e) {
             next(e);
         }
