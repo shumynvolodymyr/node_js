@@ -1,13 +1,14 @@
 const {jwtService} = require('../service');
-const {User, Action, O_Auth} = require('../db');
-const {userNormalized: {userNormalizeHandler}} = require('../utils');
 const {ResponseStatusCodesEnum, emailActionEnum, tokenTypesEnum, config} = require('../config/');
 const {messagesEnum} = require('../errors');
+const {userNormalized: {userNormalizeHandler}} = require('../utils');
+const {User, Action, O_Auth} = require('../db');
+const userService = require('../service/user.service');
 
 module.exports = {
     getUsers: async (req, res, next) => {
         try {
-            const user = await User.find();
+            const user = await userService.getAllUsers(req.query);
 
             res.json(user);
         } catch (e) {
