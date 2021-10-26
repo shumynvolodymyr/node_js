@@ -431,6 +431,12 @@
           "200": {
             "description": "Updated!"
           },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/badRequestError"
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "schema": {
