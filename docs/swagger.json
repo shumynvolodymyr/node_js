@@ -82,7 +82,7 @@
             "description": "Success",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/ApiResponse"
+              "$ref": "#/definitions/ApiResponseWithActionToken"
             }
           },
           "400": {
@@ -449,6 +449,40 @@
   },
   "definitions": {
     "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "75736f8a558f7",
+          "description": "MongoDB ID"
+        },
+        "name": {
+          "type": "string",
+          "example": "Name"
+        },
+        "login": {
+          "type": "string",
+          "example": "Your login"
+        },
+        "email": {
+          "type": "string",
+          "example": "user@gmail.com"
+        },
+        "age": {
+          "type": "number",
+          "example": 18
+        },
+        "is_active": {
+          "type": "boolean",
+          "example": true
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "ApiResponseWithActionToken": {
       "type": "object",
       "properties": {
         "_id": {
