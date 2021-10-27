@@ -345,7 +345,7 @@
           {
             "name": "token",
             "in": "path",
-            "description": "This is `access_token` from POST /auth endpoint",
+            "description": "This is `action_token` from POST /users endpoint",
             "required": true,
             "type": "string"
           }
