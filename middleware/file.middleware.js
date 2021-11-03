@@ -12,12 +12,14 @@ const {
 module.exports = {
     checkUserImage: (req, res, next) => {
         try {
-            if (!req.files || !req.files.image) {
+            const {image} = req.files || {};
+
+            if (!image) {
                 next();
                 return;
             }
 
-            const {size, mimetype} = req.files.image;
+            const {size, mimetype} = image;
 
             if (!PHOTOS_MIMETYPES.includes(mimetype)) {
                 throw new ErrorHandler(FORMAT_NOT_SUPPORTED, BAD_REQUEST);

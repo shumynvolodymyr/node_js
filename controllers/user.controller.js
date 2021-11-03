@@ -36,10 +36,8 @@ module.exports = {
             await Action.create({action_token, type: tokenTypesEnum.ACTION_TOKEN, user_id: user._id});
             await user.sendMail(emailActionEnum.USER_CREATED, {login, password, activatePasswordUrl});
 
-            const image = req.files.image;
-
-            if (image) {
-                const info = await s3Service.uploadImage(image, 'users', user._id.toString());
+            if (req.files?.image) {
+                const info = await s3Service.uploadImage(req.files.image, 'users', user._id.toString());
 
                 user = await User.findByIdAndUpdate({_id: user._id}, {image: info.Location}, {new: true});
             }
