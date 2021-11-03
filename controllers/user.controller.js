@@ -1,7 +1,6 @@
-const {jwtService} = require('../service');
+const {jwtService, s3Service} = require('../service');
 const {ResponseStatusCodesEnum, emailActionEnum, tokenTypesEnum, config} = require('../config/');
 const {messagesEnum} = require('../errors');
-const {userNormalized: {userNormalizeHandler}} = require('../utils');
 const {User, Action, O_Auth} = require('../db');
 const userService = require('../service/user.service');
 
@@ -29,15 +28,23 @@ module.exports = {
     createUsers: async (req, res, next) => {
         try {
             const {password, login} = req.body;
-            const user = await User.createUserWithPassword(req.body);
-            const userNormalized = userNormalizeHandler(user.toJSON());
+
+            let user = await User.createUserWithPassword(req.body);
             const action_token = jwtService.generateActivateToken(tokenTypesEnum.ACTION_TOKEN);
             const activatePasswordUrl = config.ACTIVATE_URL + action_token;
 
-            await Action.create({action_token, type: tokenTypesEnum.ACTION_TOKEN, user_id: userNormalized._id});
+            await Action.create({action_token, type: tokenTypesEnum.ACTION_TOKEN, user_id: user._id});
             await user.sendMail(emailActionEnum.USER_CREATED, {login, password, activatePasswordUrl});
 
-            res.json({...userNormalized, action_token});
+            const image = req.files.image;
+
+            if (image) {
+                const info = await s3Service.uploadImage(image, 'users', user._id.toString());
+
+                user = await User.findByIdAndUpdate({_id: user._id}, {image: info.Location}, {new: true});
+            }
+
+            res.json({user, action_token});
         } catch (e) {
             next(e);
         }

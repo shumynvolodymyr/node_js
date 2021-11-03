@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const express = require('express');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+const express = require('express');
+const fileUpload = require('express-fileupload');
 const helmet = require('helmet');
+const mongoose = require('mongoose');
+const rateLimit = require('express-rate-limit');
 const swaggerUI = require('swagger-ui-express');
 
 require('dotenv').config();
@@ -16,7 +17,9 @@ const swaggerJson = require('./docs/swagger.json');
 
 const app = express();
 
-mongoose.connect(MONGO_URL);
+mongoose.connect(MONGO_URL).then(()=>{
+    console.log('Mongo connected successfully');
+});
 
 app.use(helmet());
 app.use(cors({origin: _configCors}));
@@ -32,6 +35,7 @@ if (NODE_ENV === 'dev') {
     app.use(morgan('dev'));
 }
 
+app.use(fileUpload({}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 

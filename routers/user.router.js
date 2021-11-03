@@ -1,13 +1,14 @@
 const router = require('express').Router();
 
 const {userController} = require('../controllers');
-const {userMiddleware, userAuthMiddleware} = require('../middleware');
+const {fileMiddleware, userMiddleware, userAuthMiddleware} = require('../middleware');
 const {userValidator: {createUserValidator, updateUserValidator}} = require('../joi_validators');
 const {tokenTypesEnum: {ACCESS}} = require('../config');
 
 router.post(
     '/',
     userMiddleware.isUserBodyValid(createUserValidator),
+    fileMiddleware.checkUserImage,
     userMiddleware.checkUniqueData,
     userController.createUsers
 );

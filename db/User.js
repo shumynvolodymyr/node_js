@@ -33,6 +33,9 @@ const userSchema = new Schema({
         type: Number,
         trim: true
     },
+    image: {
+        type: String
+    },
     is_active: {
         type: Boolean,
         trim: true,

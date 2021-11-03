@@ -16,6 +16,8 @@ const createUserValidator = Joi.object({
         .max(32)
         .trim()
         .required(),
+    image: Joi
+        .string(),
     password: Joi
         .string()
         .regex(PASSWORD_REGEXP)

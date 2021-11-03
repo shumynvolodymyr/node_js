@@ -24,4 +24,13 @@ module.exports = {
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || '777HnL77',
 
     ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:7000',
+
+    AWS_S3_REGION:process.env.AWS_S3_REGION,
+    AWS_S3_NAME:process.env.AWS_S3_NAME,
+    AWS_S3_ACCESS_KEY:process.env.AWS_S3_ACCESS_KEY,
+    AWS_S3_SECRET_ACCESS_KEY:process.env.AWS_S3_SECRET_ACCESS_KEY,
+
+    PHOTO_MAX_SIZE: process.env.PHOTO_MAX_SIZE || 2 * 1024 * 1024, // 2MB
+    FILE_MAX_SIZE: process.env.FILE_MAX_SIZE || 5 * 1024 * 1024, // 5MB
+    VIDEO_MAX_SIZE: process.env.VIDEO_MAX_SIZE || 15 * 1024 * 1024, // 15MB
 };
