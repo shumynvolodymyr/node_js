@@ -31,5 +31,6 @@ module.exports = {
 function _fileNameBuilder(fileName, itemType, itemId) {
     const fileExtention = path.extname(fileName);
 
-    return path.join(itemType, itemId, `${nanoid()}${fileExtention}`);
+    // return path.join(itemType, itemId, `${nanoid()}${fileExtention}`);  // FOR LINUX
+    return path.posix.join(itemType, itemId, `${nanoid()}${fileExtention}`); // FOR WINDOWS
 }
